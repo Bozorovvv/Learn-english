@@ -1,11 +1,11 @@
-import React from "react";
+import React from 'react'
 
-function Dictionary(props) {
+function Dictionary() {
   return (
     <div>
       <h1>Dictionary</h1>
     </div>
-  );
+  )
 }
 
-export default Dictionary;
+export default Dictionary

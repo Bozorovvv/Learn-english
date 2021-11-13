@@ -1,21 +1,22 @@
-import React from "react";
-import { Switch, Route } from "react-router-dom";
-import Dictionary from "./pages/Dictionary";
-import Learning from "./pages/Learning";
-import Login from "./pages/Login";
-import MiniGames from "./pages/MiniGames";
-import Register from "./pages/Register";
-import Settings from "./pages/Settings";
-import Statistics from "./pages/Statistics";
-import Welcome from "./pages/Welcome";
-import "./App.css";
+import React from 'react'
+import { Route, Switch } from 'react-router-dom'
+import Dictionary from './pages/Dictionary'
+import Learning from './pages/Learning'
+import Login from './pages/Login'
+import MiniGames from './pages/MiniGames'
+import Register from './pages/Register'
+import Settings from './pages/Settings'
+import Statistics from './pages/Statistics'
+import Welcome from './pages/Welcome'
+import Navbar from './components/Navbar'
+import './App.css'
 
 function App() {
   return (
     <React.Fragment>
       <Navbar />
       <Switch>
-        <Route exact path="/welcome" component={Welcome} />
+        <Route path="/welcome" component={Welcome} />
         <Route path="/register" component={Register} />
         <Route path="/login" component={Login} />
         <Route path="/learning" component={Learning} />
@@ -25,7 +26,7 @@ function App() {
         <Route path="/settings" component={Settings} />
       </Switch>
     </React.Fragment>
-  );
+  )
 }
 
-export default App;
+export default App

@@ -1,28 +1,42 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import Question from '../components/Question'
+import Questions from '../components/Questions'
+import { getWords } from '../services/getWords'
 
 function Learning() {
+  const [words, setWords] = useState([])
   const [isLearning, setIsLearning] = useState(false)
-  const [isCorrectAnswer, setIsCorrectAnswer] = useState(false)
+  const [isAnswered, setIsAnswered] = useState(false)
+
+  useEffect(() => {
+    ;(async function fetchWords() {
+      const res = await getWords()
+      setWords(res.data)
+    })()
+  }, [])
 
   function StartLearn() {
     setIsLearning(!isLearning)
   }
   function CheckAnswer() {
-    setIsCorrectAnswer(!isCorrectAnswer)
+    setIsAnswered(!isAnswered)
   }
+
   return (
     <div className="container-fluid">
       {isLearning ? (
         <>
           <div className="row">
-            <div className="col text-center">
+            <div className="col text-center mt-2">
               <h1>Learning just now</h1>
-
-              <Question
+            </div>
+          </div>
+          <div className="row justify-content-center">
+            <div className="col-5 justify-content-center">
+              <Questions
+                words={words}
                 CheckAnswer={CheckAnswer}
-                isCorrectAnswer={isCorrectAnswer}
+                isAnswered={isAnswered}
               />
             </div>
           </div>
@@ -31,7 +45,9 @@ function Learning() {
         <>
           <div className="row">
             <div className="col">
-              <h4 className="text-center my-5">Today you learned 5 words</h4>
+              <h4 className="text-center my-5">
+                Today you learned {words.length} words
+              </h4>
               <div className="progress">
                 <div
                   className="progress-bar"

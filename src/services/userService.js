@@ -1,12 +1,25 @@
-import http from './httpService'
-import { apiUrl } from '../config.json'
+import http from "./httpService";
+import { apiUrl } from "../config.json";
+import jwtDecode from "jwt-decode";
 
-const apiEndpoint = apiUrl + '/Users/post_users'
+const apiEndpoint = apiUrl + "/users";
 
-export function register(user) {
+export function register(name, username, password) {
   return http.post(apiEndpoint, {
-    name: user.name,
-    email: user.username,
-    password: user.password,
-  })
+    name: name,
+    email: username,
+    password: password,
+  });
+}
+
+export default async function getUser() {
+  const jwt = localStorage.getItem("token");
+  const user = await jwtDecode(jwt);
+  const userId = user.id;
+  return http.get(apiEndpoint + "/" + userId, {
+    headers: {
+      Authorization: `Bearer ${jwt}`,
+      Accept: "application/json",
+    },
+  });
 }

@@ -23,7 +23,7 @@ function Learning() {
   }
 
   return (
-    <div className="container-fluid">
+    <div className="container">
       {isLearning ? (
         <>
           <div className="row">

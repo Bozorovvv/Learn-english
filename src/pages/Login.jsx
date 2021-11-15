@@ -1,41 +1,40 @@
-import React, { useState } from 'react'
-import Input from '../components/Input'
+import React, { useState } from "react";
+import Input from "../components/Input";
+import { login } from "../services/authService";
 
-function Login() {
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [errors, setErrors] = useState({})
+function Login(props) {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState({});
 
   function validate() {
-    const errors = {}
-    if (username.trim() === '') {
-      errors.username = 'Username is required'
+    const errors = {};
+    if (username.trim() === "") {
+      errors.username = "Username is required";
     }
-    if (password.trim() === '') {
-      errors.password = 'Password is required'
+    if (password.trim() === "") {
+      errors.password = "Password is required";
     }
-    return Object.keys(errors).length === 0 ? null : errors
+    return Object.keys(errors).length === 0 ? null : errors;
   }
 
-  function handleSubmit(e) {
-    e.preventDefault()
-
-    const errors = validate()
-    setErrors(errors || {})
-    if (errors) return
-    setUsername('')
-    setPassword('')
-
-    console.log(username)
-    console.log(password)
+  async function handleSubmit(e) {
+    e.preventDefault();
+    await login(username, password);
+    window.location = "/learning";
+    const errors = validate();
+    setErrors(errors || {});
+    if (errors) return;
+    setUsername("");
+    setPassword("");
   }
 
   function HandleChagePassword(e) {
-    setPassword(e.target.value)
+    setPassword(e.target.value);
   }
 
   function HandleChageUsername(e) {
-    setUsername(e.target.value)
+    setUsername(e.target.value);
   }
 
   return (
@@ -69,7 +68,7 @@ function Login() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default Login
+export default Login;

@@ -44,6 +44,8 @@ function Login(props) {
           <h1>Login</h1>
           <form onSubmit={handleSubmit}>
             <Input
+              autoFocus="true"
+              type="text"
               name="username"
               label="Username"
               error={errors.username}
@@ -51,6 +53,7 @@ function Login(props) {
               onChange={HandleChageUsername}
             />
             <Input
+              type="password"
               name="password"
               label="Password"
               error={errors.password}

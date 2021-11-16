@@ -57,7 +57,11 @@ function Navbar({ userName }) {
               >
                 Login
               </Link>
-              <Link to="/register" type="button" className="btn btn-primary">
+              <Link
+                to="/register"
+                type="button"
+                className="btn btn-outline-primary"
+              >
                 Register
               </Link>
             </div>

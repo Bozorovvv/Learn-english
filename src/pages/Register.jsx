@@ -29,7 +29,8 @@ function Register(props) {
     setErrors(errors || {});
     if (errors) return;
     await userService.register(name, username, password);
-    window.location = "/";
+    window.location = "/login";
+
     setUsername("");
     setPassword("");
     setName("");
@@ -53,6 +54,7 @@ function Register(props) {
           <h1>Register</h1>
           <form onSubmit={handleSubmit}>
             <Input
+              autoFocus="true"
               name="name"
               label="Name"
               error={errors.name}

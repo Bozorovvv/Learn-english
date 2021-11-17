@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 function Navbar({ userName }) {
+  const [activeLink, setActiveLink] = useState("learning");
   return (
-    <div className="container-fluid">
+    <div
+      className="container-fluid shadow p-3 mb-5 bg-white rounded"
+      style={{ height: "10vh" }}
+    >
       <nav className="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
         <Link
           to="/welcome"
@@ -16,7 +20,10 @@ function Navbar({ userName }) {
           <li>
             <Link
               to={userName ? "/learning" : "/"}
-              className="nav-link px-2 link-primary"
+              onClick={() => setActiveLink("learning")}
+              className={`nav-link px-2 link-${
+                activeLink === "learning" ? "info" : "dark"
+              }`}
             >
               Learning
             </Link>
@@ -24,7 +31,10 @@ function Navbar({ userName }) {
           <li>
             <Link
               to={userName ? "/dictionary" : "/"}
-              className="nav-link px-2 link-dark"
+              onClick={() => setActiveLink("dictionary")}
+              className={`nav-link px-2 link-${
+                activeLink === "dictionary" ? "info" : "dark"
+              }`}
             >
               Dictionary
             </Link>
@@ -32,7 +42,10 @@ function Navbar({ userName }) {
           <li>
             <Link
               to={userName ? "/statistics" : "/"}
-              className="nav-link px-2 link-dark"
+              onClick={() => setActiveLink("statistics")}
+              className={`nav-link px-2 link-${
+                activeLink === "statistics" ? "info" : "dark"
+              }`}
             >
               Statistics
             </Link>
@@ -40,7 +53,10 @@ function Navbar({ userName }) {
           <li>
             <Link
               to={userName ? "/settings" : "/"}
-              className="nav-link px-2 link-dark"
+              onClick={() => setActiveLink("settings")}
+              className={`nav-link px-2 link-${
+                activeLink === "settings" ? "info" : "dark"
+              }`}
             >
               Settings
             </Link>
@@ -53,14 +69,14 @@ function Navbar({ userName }) {
               <Link
                 to="/login"
                 type="button"
-                className="btn btn-outline-primary me-2"
+                className="btn btn-outline-info me-2"
               >
                 Login
               </Link>
               <Link
                 to="/register"
                 type="button"
-                className="btn btn-outline-primary"
+                className="btn btn-outline-info"
               >
                 Register
               </Link>
@@ -70,8 +86,12 @@ function Navbar({ userName }) {
         {userName && (
           <React.Fragment>
             <div className="col-md-3 text-end">
-              <span className="text-primary m-2">{userName}</span>
-              <Link to="/logout" type="button" className="btn btn-primary">
+              <h5 className="text-secondary m-2 d-inline">{userName}</h5>
+              <Link
+                to="/logout"
+                type="button"
+                className="btn btn-outline-info text-secondary"
+              >
                 Logout
               </Link>
             </div>

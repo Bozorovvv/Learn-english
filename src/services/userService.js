@@ -23,3 +23,8 @@ export default async function getUser() {
     },
   });
 }
+
+export async function getUserId() {
+  const response = await getUser();
+  return response.data.id;
+}

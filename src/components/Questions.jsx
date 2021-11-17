@@ -24,7 +24,7 @@ function Question({
       <div className="card-body">
         {isAnswered ? (
           <React.Fragment>
-            <div className="alert alert-info" role="alert">
+            <div className="alert-white" role="alert">
               <h3 className="card-title my-2 text-capitalize">
                 {isAnswered ? word.word + " - " : null}
                 {word.wordTranslate + " " + word.transcription}
@@ -49,14 +49,14 @@ function Question({
             </div>
             <div className="card-body px-0 d-flex justify-content-between">
               <div className="btn-group btn-group-toggle" data-toggle="buttons">
-                <button className="btn btn-outline-info">easy</button>
-                <button className="btn btn-outline-warning">difficult</button>
-                <button className="btn btn-outline-danger">delete</button>
+                <button className="btn btn-outline-secondary">easy</button>
+                <button className="btn btn-outline-secondary">difficult</button>
+                <button className="btn btn-outline-secondary">delete</button>
               </div>
 
               <button
                 onClick={handleNextQuestion}
-                className={!gameEnd ? "btn btn-info" : "btn btn-warning"}
+                className="btn btn-outline-info"
               >
                 Next
               </button>
@@ -96,7 +96,7 @@ function Question({
                   style={{ width: "100%" }}
                   disabled={!answer}
                   type="submit"
-                  className="btn btn-primary"
+                  className="btn btn-info"
                 >
                   Answer
                 </button>

@@ -63,7 +63,7 @@ function Login(props) {
             <button
               disabled={validate()}
               type="submit"
-              className="btn btn-primary mt-2"
+              className="btn btn-info mt-2"
             >
               Login
             </button>

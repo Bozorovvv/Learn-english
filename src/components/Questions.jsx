@@ -7,7 +7,6 @@ function Question({
   CheckAnswer,
   handleNextQuestion,
   showAnswer,
-  gameEnd,
   wrongAnswer,
 }) {
   const [answer, setAnswer] = useState("");
@@ -21,7 +20,7 @@ function Question({
   return (
     <div className="card mt-4" style={{ width: "100%" }}>
       <img src={apiUrl + "/" + word.image} className="card-img-top" alt="..." />
-      <div className="card-body">
+      <div className="card">
         {isAnswered ? (
           <React.Fragment>
             <div className="alert-white" role="alert">
@@ -30,14 +29,14 @@ function Question({
                 {word.wordTranslate + " " + word.transcription}
               </h3>
 
-              <div className="card-body p-0 mt-3">
+              <div className="card p-0 mt-3">
                 <h5 className="card-text m-0 text-secondary">
                   - {word.textExample.replace(/(<([^>]+)>)/gi, "")}
                 </h5>
                 <p className="card-text m-0 text-secondary">
                   {word.textExampleTranslate}
                 </p>
-                <div className="card-body p-0 mt-3">
+                <div className="card p-0 mt-3">
                   <h5 className="card-text m-0 text-secondary">
                     - {word.textMeaning.replace(/(<([^>]+)>)/gi, "")}
                   </h5>
@@ -47,14 +46,21 @@ function Question({
                 </div>
               </div>
             </div>
-            <div className="card-body px-0 d-flex justify-content-between">
+            <div className="card px-0 d-flex justify-content-between">
               <div className="btn-group btn-group-toggle" data-toggle="buttons">
-                <button className="btn btn-outline-secondary">easy</button>
-                <button className="btn btn-outline-secondary">difficult</button>
-                <button className="btn btn-outline-secondary">delete</button>
+                <button type="button" className="btn btn-outline-secondary">
+                  easy
+                </button>
+                <button type="button" className="btn btn-outline-secondary">
+                  difficult
+                </button>
+                <button type="button" className="btn btn-outline-secondary">
+                  delete
+                </button>
               </div>
 
               <button
+                type="button"
                 onClick={handleNextQuestion}
                 className="btn btn-outline-info"
               >
@@ -91,7 +97,7 @@ function Question({
                 id="inputEmail3"
                 placeholder="Answer here.."
               />
-              <div className="card-body px-0 d-flex justify-content-center">
+              <div className="card px-0 d-flex justify-content-center">
                 <button
                   style={{ width: "100%" }}
                   disabled={!answer}
@@ -102,17 +108,18 @@ function Question({
                 </button>
               </div>
             </form>
-            <div className="card-body p-0 d-flex justify-content-center">
-              <button
-                style={{ width: "100%" }}
-                onClick={showAnswer}
-                className="btn btn-outline-secondary"
-              >
-                Show answer
-              </button>
-            </div>
           </React.Fragment>
         )}
+      </div>
+      <div className="card p-0 d-flex justify-content-center">
+        <button
+          type="button"
+          style={{ width: "100%" }}
+          onClick={showAnswer}
+          className="btn btn-outline-secondary"
+        >
+          Show answer
+        </button>
       </div>
     </div>
   );

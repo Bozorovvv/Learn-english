@@ -1,5 +1,4 @@
 import http from "./httpService";
-import jwtDecode from "jwt-decode";
 import { apiUrl } from "../config.json";
 
 const apiEndpoint = apiUrl + "/signin";
@@ -13,21 +12,8 @@ export async function login(email, password) {
   localStorage.setItem(tokenKey, token);
 }
 
-export function loginWithJwt(jwt) {
-  localStorage.setItem(tokenKey, jwt);
-}
-
 export function logout() {
   localStorage.removeItem(tokenKey);
-}
-
-export function getCurrentUser() {
-  try {
-    const jwt = localStorage.getItem(tokenKey);
-    return jwtDecode(jwt);
-  } catch (ex) {
-    return null;
-  }
 }
 
 export function getJwt() {
@@ -36,8 +22,6 @@ export function getJwt() {
 
 export default {
   login,
-  loginWithJwt,
   logout,
-  getCurrentUser,
   getJwt,
 };

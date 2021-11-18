@@ -16,12 +16,7 @@ export default async function getUser() {
   const jwt = localStorage.getItem("token");
   const user = await jwtDecode(jwt);
   const userId = user.id;
-  return http.get(apiEndpoint + "/" + userId, {
-    headers: {
-      Authorization: `Bearer ${jwt}`,
-      Accept: "application/json",
-    },
-  });
+  return http.get(apiEndpoint + "/" + userId);
 }
 
 export async function getUserId() {

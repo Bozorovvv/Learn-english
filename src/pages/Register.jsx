@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Input from "../components/Input";
 import * as userService from "../services/userService";
 
-function Register(props) {
+function Register({ history }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -29,7 +29,7 @@ function Register(props) {
     setErrors(errors || {});
     if (errors) return;
     await userService.register(name, username, password);
-    window.location = "/login";
+    history.push("/login");
 
     setUsername("");
     setPassword("");

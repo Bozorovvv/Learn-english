@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Input from "../components/Input";
 import { login } from "../services/authService";
 
-function Login(props) {
+function Login({ history }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});

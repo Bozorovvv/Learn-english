@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import Questions from "../components/Questions";
 import Modal from "../components/Modal";
-import { getWords } from "../services/getWords";
-import { Link } from "react-router-dom";
-// import { getUserWords } from "../services/getWords";
-// import { getUserId } from "../services/userService";
+import { getWords } from "../services/wordsService";
+import { getUserWords } from "../services/wordsService";
+import { getLearnedUserWords } from "../services/wordsService";
+import { createUserWord } from "../services/wordsService";
+import { getUserId } from "../services/userService";
 
 function Learning() {
   const [words, setWords] = useState([]);
@@ -17,18 +19,17 @@ function Learning() {
 
   const keys = Object.keys(words);
 
-  // FOR GET USER`S LEARNED WORDS
-  // async function getSavedWords() {
-  //   const userId = await getUserId();
-  //   const userWords = await getUserWords(userId);
-  //   console.log(userWords);
-  // }
-
   useEffect(() => {
     (async function fetchWords() {
       const res = await getWords();
-
       setWords(res.data);
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async function fetchUserWords() {
+      const res = await getLearnedUserWords();
+      console.log(res.data);
     })();
   }, []);
 
@@ -36,31 +37,36 @@ function Learning() {
     setIsLearning(!isLearning);
   }
 
-  function CheckAnswer(answer) {
-    if (answer === words[keys[currentIndex]].word) {
-      setIsAnswered(!isAnswered);
+  function CheckAnswer(user_answer) {
+    const real_answer = words[keys[currentIndex]].word;
+    if (user_answer === real_answer) {
+      console.log("posted answer to API!!!");
+      // Post answer to API which sumbit true
+      setCurrentIndex(currentIndex + 1);
     } else {
       setWrongAnswer(true);
     }
   }
 
   function showAnswer() {
-    setIsAnswered(!isAnswered);
+    setIsAnswered(true);
   }
 
   function showGameEnd() {
-    setLearnedWords(learnedWords + 1);
+    // function for post wordId to user
     setGameEnd(!gameEnd);
   }
 
   function handleNextQuestion() {
-    if (words.length - 1 === currentIndex) {
-      showGameEnd();
-    } else {
+    const real_answer = words[keys[currentIndex]].word;
+    console.log("This is word posted to API which status True");
+    // Post answer to API which sumbit true
+
+    if (!(words.length === currentIndex + 1)) {
       setCurrentIndex(currentIndex + 1);
-      setLearnedWords(learnedWords + 1);
-      setIsAnswered(!isAnswered);
-      setWrongAnswer(false);
+      setIsAnswered(false);
+    } else {
+      showGameEnd();
     }
   }
 
@@ -99,7 +105,6 @@ function Learning() {
               <div className="row justify-content-center ">
                 <div className="col-sm-10 col-md-8 col-lg-4 justify-content-center shadow p-3 mb-5 bg-white rounded">
                   <Questions
-                    gameEnd={gameEnd}
                     showGameEnd={showGameEnd}
                     word={words[keys[currentIndex]]}
                     isAnswered={isAnswered}

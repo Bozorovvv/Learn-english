@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import Questions from "../components/Questions";
 import Modal from "../components/Modal";
+import { Link } from "react-router-dom";
 import { getWords } from "../services/wordsService";
-import { getUserWords } from "../services/wordsService";
 import { getLearnedUserWords } from "../services/wordsService";
-import { createUserWord } from "../services/wordsService";
-import { getUserId } from "../services/userService";
 
 function Learning() {
   const [words, setWords] = useState([]);
   const [isLearning, setIsLearning] = useState(false);
   const [isAnswered, setIsAnswered] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [learnedWords, setLearnedWords] = useState(0);
+  const [allLearnedWords, setAllLearnedWords] = useState(0);
+  const [difficultWords, setDifficultWords] = useState(0);
+
   const [wrongAnswer, setWrongAnswer] = useState(false);
   const [gameEnd, setGameEnd] = useState(false);
 
@@ -29,19 +28,30 @@ function Learning() {
   useEffect(() => {
     (async function fetchUserWords() {
       const res = await getLearnedUserWords();
-      console.log(res.data);
+      setAllLearnedWords(res.data.length);
+      setDifficultWords(
+        res.data.filter((words) => "difficult" === words.difficulty)
+      );
     })();
   }, []);
+
+  // const arr = Object.keys(difficultWords).map(
+  //   (id) => difficultWords[id].wordId
+  // );
+
+  console.log(difficultWords);
+
+  const s = words.filter((item, index) => {
+    const allWordsId = words.map((item) => item.id);
+  });
 
   function StartLearn() {
     setIsLearning(!isLearning);
   }
 
-  function CheckAnswer(user_answer) {
-    const real_answer = words[keys[currentIndex]].word;
-    if (user_answer === real_answer) {
-      console.log("posted answer to API!!!");
-      // Post answer to API which sumbit true
+  function CheckAnswer(answer) {
+    const realAnswer = words[keys[currentIndex]].word;
+    if (answer === realAnswer) {
       setCurrentIndex(currentIndex + 1);
     } else {
       setWrongAnswer(true);
@@ -53,18 +63,14 @@ function Learning() {
   }
 
   function showGameEnd() {
-    // function for post wordId to user
     setGameEnd(!gameEnd);
   }
 
   function handleNextQuestion() {
-    const real_answer = words[keys[currentIndex]].word;
-    console.log("This is word posted to API which status True");
-    // Post answer to API which sumbit true
-
     if (!(words.length === currentIndex + 1)) {
       setCurrentIndex(currentIndex + 1);
       setIsAnswered(false);
+      setWrongAnswer(false);
     } else {
       showGameEnd();
     }
@@ -79,18 +85,20 @@ function Learning() {
             <div className="card-body">
               <h4 className="text-center my-3">
                 Today you've learned{" "}
-                <span className="text-info">{learnedWords} </span>words
+                <span className="text-info">{allLearnedWords} </span>words
               </h4>
               <div className="progress">
                 <div
                   className="progress-bar bg-info text-dark"
                   role="progressbar"
-                  style={{ width: `${(learnedWords / words.length) * 100}%` }}
-                  aria-valuenow={learnedWords}
+                  style={{
+                    width: `${(allLearnedWords / words.length) * 100}%`,
+                  }}
+                  aria-valuenow={allLearnedWords}
                   aria-valuemin="0"
                   aria-valuemax="20"
                 >
-                  {learnedWords + "/" + words.length}
+                  {allLearnedWords + "/" + words.length}
                 </div>
               </div>
             </div>
@@ -132,7 +140,9 @@ function Learning() {
                       >
                         Let`s start
                       </button>
-                      <h6 className="mt-2">Today you ... learned words</h6>
+                      <h6 className="mt-2">
+                        Today you {allLearnedWords} learned words
+                      </h6>
                     </div>
                   </div>
                 </div>
@@ -146,7 +156,7 @@ function Learning() {
                       <Link to="/learning" className="btn btn-outline-info">
                         Let`s start
                       </Link>
-                      <h6 className="mt-2">... learned words</h6>
+                      <h6 className="mt-2">{allLearnedWords} learned words</h6>
                     </div>
                   </div>
                 </div>
@@ -160,7 +170,9 @@ function Learning() {
                       <Link to="/learning" className="btn btn-outline-info">
                         Let`s start
                       </Link>
-                      <h6 className="mt-2">... difficult words</h6>
+                      <h6 className="mt-2">
+                        {difficultWords.length} difficult words
+                      </h6>
                     </div>
                   </div>
                 </div>
@@ -170,7 +182,7 @@ function Learning() {
         </div>
       ) : (
         <React.Fragment>
-          <Modal learnedWords={learnedWords} />
+          <Modal allLearnedWords={allLearnedWords} />
         </React.Fragment>
       )}
     </div>

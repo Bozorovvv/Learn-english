@@ -15,6 +15,7 @@ export function getUserWords(userId) {
   return http.get(`${apiUrl}/users/${userId}/words`);
 }
 
+
 export async function createUserWord(userId, wordId, difficulty) {
   http
     .post(

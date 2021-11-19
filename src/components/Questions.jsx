@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { apiUrl } from "../config.json";
+import { getUserId } from "../services/userService";
+import { createUserWord } from "../services/wordsService";
 
 function Question({
   word,
@@ -9,18 +11,34 @@ function Question({
   showAnswer,
   wrongAnswer,
 }) {
+  const [userId, setUserId] = useState("");
   const [answer, setAnswer] = useState("");
+  useEffect(async () => {
+    const data = await getUserId();
+    setUserId(data);
+  }, []);
+
+  console.log(word.id);
+
+  function onNextQuestion(difficulty) {
+    createUserWord(userId, word.id, difficulty);
+    handleNextQuestion();
+  }
 
   function handleSubmit(e) {
     e.preventDefault();
-    CheckAnswer(answer);
+    if (answer === word.word) {
+      createUserWord(userId, word.id, "easy");
+      CheckAnswer(answer);
+    } else {
+      CheckAnswer(answer);
+    }
     setAnswer("");
   }
-
   return (
-    <div className="card mt-4" style={{ width: "100%" }}>
-      <img src={apiUrl + "/" + word.image} className="card-img-top" alt="..." />
-      <div className="card">
+    <div className="card-body" style={{ width: "100%" }}>
+      <img src={apiUrl + "/" + word.image} className="card-img-top shadow-sm" alt="..." />
+      <div>
         {isAnswered ? (
           <React.Fragment>
             <div className="alert-white" role="alert">
@@ -29,14 +47,14 @@ function Question({
                 {word.wordTranslate + " " + word.transcription}
               </h3>
 
-              <div className="card p-0 mt-3">
+              <div className="card-body p-0 mt-3">
                 <h5 className="card-text m-0 text-secondary">
                   - {word.textExample.replace(/(<([^>]+)>)/gi, "")}
                 </h5>
                 <p className="card-text m-0 text-secondary">
                   {word.textExampleTranslate}
                 </p>
-                <div className="card p-0 mt-3">
+                <div className="card-body p-0 mt-3">
                   <h5 className="card-text m-0 text-secondary">
                     - {word.textMeaning.replace(/(<([^>]+)>)/gi, "")}
                   </h5>
@@ -46,22 +64,11 @@ function Question({
                 </div>
               </div>
             </div>
-            <div className="card px-0 d-flex justify-content-between">
-              <div className="btn-group btn-group-toggle" data-toggle="buttons">
-                <button type="button" className="btn btn-outline-secondary">
-                  easy
-                </button>
-                <button type="button" className="btn btn-outline-secondary">
-                  difficult
-                </button>
-                <button type="button" className="btn btn-outline-secondary">
-                  delete
-                </button>
-              </div>
-
+            <div className="card-body px-0 d-flex justify-content-between">
               <button
+                style={{ width: "100%" }}
+                onClick={() => onNextQuestion("difficult")}
                 type="button"
-                onClick={handleNextQuestion}
                 className="btn btn-outline-info"
               >
                 Next
@@ -89,7 +96,6 @@ function Question({
             ) : null}
             <form onSubmit={handleSubmit}>
               <input
-                autoFocus
                 onChange={(e) => setAnswer(e.target.value.toLocaleLowerCase())}
                 value={answer}
                 type="text"
@@ -102,7 +108,7 @@ function Question({
                   style={{ width: "100%" }}
                   disabled={!answer}
                   type="submit"
-                  className="btn btn-info"
+                  className="btn btn-info shadow-sm"
                 >
                   Answer
                 </button>
@@ -111,16 +117,41 @@ function Question({
           </React.Fragment>
         )}
       </div>
-      <div className="card p-0 d-flex justify-content-center">
-        <button
-          type="button"
-          style={{ width: "100%" }}
-          onClick={showAnswer}
-          className="btn btn-outline-secondary"
-        >
-          Show answer
-        </button>
-      </div>
+      {!isAnswered ? (
+        <React.Fragment>
+          <div className="card p-0 d-flex justify-content-center">
+            <button
+              className="border border-grey shadow-sm p-3 mb-5 bg-white rounded btn"
+              type="button"
+              style={{ width: "100%" }}
+              onClick={showAnswer}
+              className="btn"
+            >
+              Show answer
+            </button>
+          </div>
+          <div
+            className="btn-group btn-group-toggle"
+            data-toggle="buttons"
+            style={{ width: "100%" }}
+          >
+            <button
+              onClick={() => onNextQuestion("difficult")}
+              type="button"
+              className="border border-grey shadow-sm btn"
+            >
+              difficult
+            </button>
+            <button
+              onClick={() => onNextQuestion("delete")}
+              type="button"
+              className="border border-grey shadow-sm btn"
+            >
+              delete
+            </button>
+          </div>
+        </React.Fragment>
+      ) : null}
     </div>
   );
 }

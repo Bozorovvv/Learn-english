@@ -1,18 +1,18 @@
-import http from "./httpService";
-import { apiUrl } from "../config.json";
-import { getUserId } from "./userService";
+import http from './httpService'
+import { apiUrl } from '../config.json'
+import { getUserId } from './userService'
 
-const apiEndpoint = apiUrl + "/words";
+const apiEndpoint = apiUrl + '/words'
 
 export function getWords() {
-  return http.get(apiEndpoint);
+  return http.get(apiEndpoint)
 }
 export function getWordById(id) {
-  return http.get(`${apiEndpoint}/${id}`);
+  return http.get(`${apiEndpoint}/${id}`)
 }
 
 export function getUserWords(userId) {
-  return http.get(`${apiUrl}/users/${userId}/words`);
+  return http.get(`${apiUrl}/users/${userId}/words`)
 }
 
 export async function createUserWord(userId, wordId, difficulty) {
@@ -25,12 +25,12 @@ export async function createUserWord(userId, wordId, difficulty) {
       }
     )
     .then((res) => {
-      console.log(res.data);
+      console.log('Pravilniy otvet')
     })
-    .catch((err) => console.log(err, err.response));
+    .catch((err) => console.log(err.response.data))
 }
 
 export async function getLearnedUserWords() {
-  const userId = await getUserId();
-  return getUserWords(userId);
+  const userId = await getUserId()
+  return getUserWords(userId)
 }

@@ -22,6 +22,7 @@ function Question({
   function onNextQuestion(difficulty) {
     createUserWord(userId, word.id, difficulty);
     handleNextQuestion();
+    setAnswer("");
   }
 
   function handleSubmit(e) {

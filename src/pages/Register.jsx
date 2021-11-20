@@ -54,7 +54,7 @@ function Register({ history }) {
           <h1>Register</h1>
           <form onSubmit={handleSubmit}>
             <Input
-              autoFocus="true"
+              autoFocus={true}
               name="name"
               label="Name"
               error={errors.name}

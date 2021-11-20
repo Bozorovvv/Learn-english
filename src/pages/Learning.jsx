@@ -10,8 +10,8 @@ function Learning() {
   const [isLearning, setIsLearning] = useState(false);
   const [isAnswered, setIsAnswered] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [allLearnedWords, setAllLearnedWords] = useState(0);
-  const [difficultWords, setDifficultWords] = useState(0);
+  const [allLearnedWords, setAllLearnedWords] = useState([]);
+  const [difficultWords, setDifficultWords] = useState([]);
 
   const [wrongAnswer, setWrongAnswer] = useState(false);
   const [gameEnd, setGameEnd] = useState(false);
@@ -23,27 +23,14 @@ function Learning() {
       const res = await getWords();
       setWords(res.data);
     })();
-  }, []);
-
-  useEffect(() => {
     (async function fetchUserWords() {
       const res = await getLearnedUserWords();
-      setAllLearnedWords(res.data.length);
+      setAllLearnedWords(res.data);
       setDifficultWords(
         res.data.filter((words) => "difficult" === words.difficulty)
       );
     })();
   }, []);
-
-  // const arr = Object.keys(difficultWords).map(
-  //   (id) => difficultWords[id].wordId
-  // );
-
-  console.log(difficultWords);
-
-  const s = words.filter((item, index) => {
-    const allWordsId = words.map((item) => item.id);
-  });
 
   function StartLearn() {
     setIsLearning(!isLearning);
@@ -85,20 +72,21 @@ function Learning() {
             <div className="card-body">
               <h4 className="text-center my-3">
                 Today you've learned{" "}
-                <span className="text-info">{allLearnedWords} </span>words
+                <span className="text-info">{allLearnedWords.length} </span>
+                words
               </h4>
               <div className="progress">
                 <div
                   className="progress-bar bg-info text-dark"
                   role="progressbar"
                   style={{
-                    width: `${(allLearnedWords / words.length) * 100}%`,
+                    width: `${(allLearnedWords.length / words.length) * 100}%`,
                   }}
-                  aria-valuenow={allLearnedWords}
+                  aria-valuenow={allLearnedWords.length}
                   aria-valuemin="0"
                   aria-valuemax="20"
                 >
-                  {allLearnedWords + "/" + words.length}
+                  {allLearnedWords.length + "/" + words.length}
                 </div>
               </div>
             </div>
@@ -141,7 +129,7 @@ function Learning() {
                         Let`s start
                       </button>
                       <h6 className="mt-2">
-                        Today you {allLearnedWords} learned words
+                        Today you {allLearnedWords.length} learned words
                       </h6>
                     </div>
                   </div>
@@ -156,7 +144,9 @@ function Learning() {
                       <Link to="/learning" className="btn btn-outline-info">
                         Let`s start
                       </Link>
-                      <h6 className="mt-2">{allLearnedWords} learned words</h6>
+                      <h6 className="mt-2">
+                        {allLearnedWords.length} learned words
+                      </h6>
                     </div>
                   </div>
                 </div>

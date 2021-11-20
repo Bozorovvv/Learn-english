@@ -18,7 +18,6 @@ function Question({
     setUserId(data);
   }, []);
 
-  console.log(word.id);
 
   function onNextQuestion(difficulty) {
     createUserWord(userId, word.id, difficulty);

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Input from "../components/Input";
 import { login } from "../services/authService";
 
-function Login({ history }) {
+function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
@@ -44,7 +44,7 @@ function Login({ history }) {
           <h1>Login</h1>
           <form onSubmit={handleSubmit}>
             <Input
-              autoFocus="true"
+              autoFocus={true}
               type="text"
               name="username"
               label="Username"

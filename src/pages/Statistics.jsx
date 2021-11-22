@@ -1,9 +1,10 @@
 import React from "react";
+import Chart from "../components/Chart";
 
 function Statistics() {
   return (
     <div>
-      <h1>Statistics</h1>
+      <Chart />
     </div>
   );
 }

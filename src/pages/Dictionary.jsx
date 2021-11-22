@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getWords } from "../services/wordsService";
 import { getLearnedUserWords } from "../services/wordsService";
+import DictionaryWords from "../components/DictionaryWords";
 
 function Dictionary() {
   const [words, setWords] = useState([]);
@@ -9,28 +10,26 @@ function Dictionary() {
   const [deletedtWords, setDeletedWords] = useState([]);
   const [newDeletedtWords, setNewDeletedWords] = useState([]);
   const [newEasytWords, setNewEasyWords] = useState([]);
-  const [newDifficultWord, setDifficultWord] = useState([]);
+  const [newDifficultWord, setNewDifficultWord] = useState([]);
+
+  useEffect(async () => {
+    const data = await getWords();
+    setWords(data.data);
+    const res = await getLearnedUserWords();
+    setDifficultWords(
+      res.data.filter((words) => "difficult" === words.difficulty)
+    );
+
+    setEasyWords(res.data.filter((words) => "easy" === words.difficulty));
+    setDeletedWords(res.data.filter((words) => "delete" === words.difficulty));
+  }, []);
 
   useEffect(() => {
-    (async function fetchWords() {
-      const res = await getWords();
-      setWords(res.data);
-    })();
-    (async function fetchUserWords() {
-      const res = await getLearnedUserWords();
-      setDifficultWords(
-        res.data.filter((words) => "difficult" === words.difficulty)
-      );
-      setEasyWords(res.data.filter((words) => "easy" === words.difficulty));
-      setDeletedWords(
-        res.data.filter((words) => "delete" === words.difficulty)
-      );
-    })();
-
     const resultDifficult = words.filter((o) =>
       difficultWords.find((o2) => o.id === o2.wordId)
     );
-    setDifficultWord(resultDifficult);
+
+    setNewDifficultWord(resultDifficult);
 
     const resultDeleted = words.filter((o) =>
       deletedtWords.find((o2) => o.id === o2.wordId)
@@ -41,7 +40,7 @@ function Dictionary() {
       easyWords.find((o2) => o.id === o2.wordId)
     );
     setNewEasyWords(resultEasy);
-  }, []);
+  }, [words, deletedtWords, easyWords, difficultWords]);
 
   return (
     <div className="container">
@@ -49,6 +48,7 @@ function Dictionary() {
       <nav>
         <div className="nav nav-tabs" id="nav-tab" role="tablist">
           <button
+            style={{ color: "black" }}
             className="nav-link active"
             id="nav-home-tab"
             data-bs-toggle="tab"
@@ -61,6 +61,7 @@ function Dictionary() {
             Learned words
           </button>
           <button
+            style={{ color: "black" }}
             className="nav-link"
             id="nav-profile-tab"
             data-bs-toggle="tab"
@@ -73,6 +74,7 @@ function Dictionary() {
             Difficult words
           </button>
           <button
+            style={{ color: "black" }}
             className="nav-link"
             id="nav-contact-tab"
             data-bs-toggle="tab"
@@ -86,32 +88,62 @@ function Dictionary() {
           </button>
         </div>
       </nav>
-      <div className="tab-content" id="nav-tabContent">
-        <div
-          className="tab-pane fade show active"
-          id="nav-home"
-          role="tabpanel"
-          aria-labelledby="nav-home-tab"
-        >
-          <h4>Learned words</h4>
+
+      {!newEasytWords.length ? (
+        <div>
+          <h6 className="m-4">loading...</h6>
         </div>
-        <div
-          className="tab-pane fade"
-          id="nav-profile"
-          role="tabpanel"
-          aria-labelledby="nav-profile-tab"
-        >
-          <h4>Difficult words</h4>
+      ) : (
+        <div>
+          <div className="tab-content" id="nav-tabContent">
+            <div
+              className="tab-pane fade show active"
+              id="nav-home"
+              role="tabpanel"
+              aria-labelledby="nav-home-tab"
+            >
+              {newEasytWords.map((word) => (
+                <DictionaryWords
+                  key={word.id}
+                  word={word}
+                  firstButton="difficult"
+                  secondButton="delete"
+                />
+              ))}
+            </div>
+            <div
+              className="tab-pane fade"
+              id="nav-profile"
+              role="tabpanel"
+              aria-labelledby="nav-profile-tab"
+            >
+              {newDifficultWord.map((word) => (
+                <DictionaryWords
+                  key={word.id}
+                  word={word}
+                  firstButton="easy"
+                  secondButton="delete"
+                />
+              ))}
+            </div>
+            <div
+              className="tab-pane fade"
+              id="nav-contact"
+              role="tabpanel"
+              aria-labelledby="nav-contact-tab"
+            >
+              {newDeletedtWords.map((word) => (
+                <DictionaryWords
+                  key={word.id}
+                  word={word}
+                  firstButton="easy"
+                  secondButton="difficult"
+                />
+              ))}
+            </div>
+          </div>
         </div>
-        <div
-          className="tab-pane fade"
-          id="nav-contact"
-          role="tabpanel"
-          aria-labelledby="nav-contact-tab"
-        >
-          <h4>Deleted words</h4>
-        </div>
-      </div>
+      )}
     </div>
   );
 }

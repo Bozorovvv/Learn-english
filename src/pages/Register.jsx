@@ -6,6 +6,9 @@ function Register({ history }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+  const [passwordErrors, setPasswordErrors] = useState();
+  const [userErrors, setUserErrors] = useState();
+  const [nameErrors, setNameErrors] = useState();
   const [errors, setErrors] = useState({});
 
   function validate() {
@@ -24,26 +27,37 @@ function Register({ history }) {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    try {
+      const errors = validate();
+      setErrors(errors || {});
+      if (errors) return;
+      await userService.register(name, username, password);
+      history.push("/login");
 
-    const errors = validate();
-    setErrors(errors || {});
-    if (errors) return;
-    await userService.register(name, username, password);
-    history.push("/login");
-
-    setUsername("");
-    setPassword("");
-    setName("");
+      setUsername("");
+      setPassword("");
+      setName("");
+    } catch (err) {
+      if (err.response.status === 417) {
+        setUserErrors("User with this email exists");
+      }
+      if (err.response.status === 422) {
+        setPasswordErrors("Password length must be at least 8 characters long");
+      }
+    }
   }
 
   function HandleChagePassword(e) {
+    if (e.target.value !== "") setPasswordErrors(false);
     setPassword(e.target.value);
   }
 
   function HandleChageUsername(e) {
+    if (e.target.value !== "") setUserErrors(false);
     setUsername(e.target.value);
   }
   function HandleChageName(e) {
+    if (e.target.value !== "") setNameErrors(false);
     setName(e.target.value);
   }
 
@@ -57,21 +71,21 @@ function Register({ history }) {
               autoFocus={true}
               name="name"
               label="Name"
-              error={errors.name}
+              error={nameErrors}
               value={name}
               onChange={HandleChageName}
             />
             <Input
               name="username"
               label="Username"
-              error={errors.username}
+              error={userErrors}
               value={username}
               onChange={HandleChageUsername}
             />
             <Input
               name="password"
               label="Password"
-              error={errors.password}
+              error={passwordErrors}
               value={password}
               onChange={HandleChagePassword}
             />

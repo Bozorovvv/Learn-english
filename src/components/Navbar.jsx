@@ -13,7 +13,8 @@ function Navbar({ userName }) {
           to="/welcome"
           className="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none"
         >
-          <i className="bi bi-box"></i> &nbsp;Box
+          <i className="bi bi-box mx-2"></i>
+          <h5>Learnglish</h5>
         </Link>
 
         <ul className="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">

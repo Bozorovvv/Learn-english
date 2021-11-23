@@ -12,36 +12,51 @@ import Navbar from "./components/Navbar";
 import NotFound from "./pages/NotFound";
 import Logout from "./components/Logout";
 import getUser from "./services/userService";
+import { WordContext } from "./state/WordContext";
+import { UserLearnedContext } from "./state/UserLearnedContext";
+import { getWords } from "./services/wordsService";
+import { getLearnedUserWords } from "./services/wordsService";
 import "./App.css";
 
 function App() {
   const [userName, setUserName] = useState("");
+  const [words, setWords] = useState([]);
+  const [allLearnedWords, setAllLearnedWords] = useState([]);
+
   useEffect(async () => {
     try {
       const response = await getUser();
       const name = response.data.name;
       setUserName(name);
+      const res = await getWords();
+      setWords(res.data);
+      const data = await getLearnedUserWords();
+      setAllLearnedWords(data.data);
     } catch (ex) {}
   }, []);
 
   return (
-    <React.Fragment>
-      <Navbar userName={userName} />
-      <Switch>
-        <Route path="/welcome" component={Welcome} />
-        <Route path="/register" component={Register} />
-        <Route path="/login" component={Login} />
-        <Route path="/logout" component={Logout} />
-        <Route path="/learning" component={Learning} />
-        <Route path="/dictionary" component={Dictionary} />
-        <Route path="/mini-games" component={MiniGames} />
-        <Route path="/statistics" component={Statistics} />
-        <Route path="/settings" component={Settings} />
-        <Route path="/not-found" component={NotFound} />
-        <Redirect from="/" exact to="welcome" />
-        <Redirect to="/not-found" />
-      </Switch>
-    </React.Fragment>
+    <WordContext.Provider value={words}>
+      <UserLearnedContext.Provider value={allLearnedWords}>
+        <React.Fragment>
+          <Navbar userName={userName} />
+          <Switch>
+            <Route path="/welcome" component={Welcome} />
+            <Route path="/register" component={Register} />
+            <Route path="/login" component={Login} />
+            <Route path="/logout" component={Logout} />
+            <Route path="/learning" component={Learning} />
+            <Route path="/dictionary" component={Dictionary} />
+            <Route path="/mini-games" component={MiniGames} />
+            <Route path="/statistics" component={Statistics} />
+            <Route path="/settings" component={Settings} />
+            <Route path="/not-found" component={NotFound} />
+            <Redirect from="/" exact to="welcome" />
+            <Redirect to="/not-found" />
+          </Switch>
+        </React.Fragment>
+      </UserLearnedContext.Provider>
+    </WordContext.Provider>
   );
 }
 

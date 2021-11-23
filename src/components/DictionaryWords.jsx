@@ -3,7 +3,7 @@ import { apiUrl } from "../config.json";
 
 function DictionaryWords({ word, firstButton, secondButton }) {
   return (
-    <div className="card-body shadow rounded d-flex justify-content-between align-items-center m-2">
+    <div className="card-body shadow-sm rounded d-flex justify-content-between align-items-center m-2">
       <div className="d-flex justify-content-between align-items-center">
         <img
           style={{ width: "70px" }}

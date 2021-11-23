@@ -5,7 +5,7 @@ function Navbar({ userName }) {
   const [activeLink, setActiveLink] = useState("learning");
   return (
     <div
-      className="container-fluid shadow p-3 mb-5 bg-white rounded"
+      className="container-fluid shadow-sm p-3 mb-5 bg-white rounded"
       style={{ height: "10vh" }}
     >
       <nav className="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">

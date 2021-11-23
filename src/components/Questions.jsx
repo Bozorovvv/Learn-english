@@ -18,7 +18,6 @@ function Question({
     setUserId(data);
   }, []);
 
-
   function onNextQuestion(difficulty) {
     createUserWord(userId, word.id, difficulty);
     handleNextQuestion();
@@ -37,7 +36,11 @@ function Question({
   }
   return (
     <div className="card-body" style={{ width: "100%" }}>
-      <img src={apiUrl + "/" + word.image} className="card-img-top shadow-sm" alt="..." />
+      <img
+        src={apiUrl + "/" + word.image}
+        className="card-img-top shadow-sm"
+        alt="..."
+      />
       <div>
         {isAnswered ? (
           <React.Fragment>

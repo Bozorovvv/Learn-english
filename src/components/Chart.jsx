@@ -1,25 +1,59 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
+import { UserLearnedContext } from "./../state/UserLearnedContext";
+import { WordContext } from "./../state/WordContext";
 import { Line } from "react-chartjs-2";
-import { getUserId } from "../services/userService";
-import { getUserStatistics } from "../services/wordsService";
 
 export function LineChart() {
-  const [learnedWordsStatistics, setLearnedWordsStatistics] = useState("");
+  const words = useContext(WordContext);
+  const allLearnedWords = useContext(UserLearnedContext);
+  const [difficultWords, setDifficultWords] = useState([]);
+  const [easyWords, setEasyWords] = useState([]);
+  const [deletedtWords, setDeletedWords] = useState([]);
+  const [newDeletedtWords, setNewDeletedWords] = useState([]);
+  const [newEasytWords, setNewEasyWords] = useState([]);
+  const [newDifficultWord, setNewDifficultWord] = useState([]);
 
-  useEffect(async () => {
-    const userId = await getUserId();
-    const learnedWords = await getUserStatistics(userId);
-    setLearnedWordsStatistics(learnedWords);
+  useEffect(() => {
+    setDifficultWords(
+      allLearnedWords.filter((words) => "difficult" === words.difficulty)
+    );
+
+    setEasyWords(
+      allLearnedWords.filter((words) => "easy" === words.difficulty)
+    );
+    setDeletedWords(
+      allLearnedWords.filter((words) => "delete" === words.difficulty)
+    );
   }, []);
 
-  console.log(learnedWordsStatistics);
+  useEffect(() => {
+    const resultDifficult = words.filter((o) =>
+      difficultWords.find((o2) => o.id === o2.wordId)
+    );
+
+    setNewDifficultWord(resultDifficult);
+
+    const resultDeleted = words.filter((o) =>
+      deletedtWords.find((o2) => o.id === o2.wordId)
+    );
+    setNewDeletedWords(resultDeleted);
+
+    const resultEasy = words.filter((o) =>
+      easyWords.find((o2) => o.id === o2.wordId)
+    );
+    setNewEasyWords(resultEasy);
+  }, [words, deletedtWords, easyWords, difficultWords]);
 
   const data = {
-    labels: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+    labels: ["easy", "Difficult", "Deleted"],
     datasets: [
       {
-        // label: learnedWordsStatistics.data.learnedWords + " words",
-        data: [12, 19, 3, 5, 2, 3, 55, 105],
+        label: allLearnedWords.length + " words",
+        data: [
+          newEasytWords.length,
+          newDifficultWord.length,
+          newDeletedtWords.length,
+        ],
         fill: false,
         backgroundColor: "rgb(255, 99, 132)",
         borderColor: "rgba(255, 99, 132, 0.2)",

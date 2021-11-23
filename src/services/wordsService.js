@@ -53,4 +53,4 @@ export async function createUserStatistics(
     .catch((err) => console.log(err.response.data));
 }
 
-createUserStatistics("6191f458fb20bf001533a159", 30, new Date(), 10);
+// createUserStatistics("6191f458fb20bf001533a159", 30, new Date(), 10);

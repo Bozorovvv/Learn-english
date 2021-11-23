@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { getWords } from "../services/wordsService";
-import { getLearnedUserWords } from "../services/wordsService";
+import React, { useContext, useState, useEffect } from "react";
 import DictionaryWords from "../components/DictionaryWords";
+import { WordContext } from "./../state/WordContext";
+import { UserLearnedContext } from "./../state/UserLearnedContext";
+import TabButton from "../components/TabButton";
 
 function Dictionary() {
-  const [words, setWords] = useState([]);
+  const words = useContext(WordContext);
+  const allLearnedWords = useContext(UserLearnedContext);
   const [difficultWords, setDifficultWords] = useState([]);
   const [easyWords, setEasyWords] = useState([]);
   const [deletedtWords, setDeletedWords] = useState([]);
@@ -12,16 +14,17 @@ function Dictionary() {
   const [newEasytWords, setNewEasyWords] = useState([]);
   const [newDifficultWord, setNewDifficultWord] = useState([]);
 
-  useEffect(async () => {
-    const data = await getWords();
-    setWords(data.data);
-    const res = await getLearnedUserWords();
+  useEffect(() => {
     setDifficultWords(
-      res.data.filter((words) => "difficult" === words.difficulty)
+      allLearnedWords.filter((words) => "difficult" === words.difficulty)
     );
 
-    setEasyWords(res.data.filter((words) => "easy" === words.difficulty));
-    setDeletedWords(res.data.filter((words) => "delete" === words.difficulty));
+    setEasyWords(
+      allLearnedWords.filter((words) => "easy" === words.difficulty)
+    );
+    setDeletedWords(
+      allLearnedWords.filter((words) => "delete" === words.difficulty)
+    );
   }, []);
 
   useEffect(() => {
@@ -44,48 +47,27 @@ function Dictionary() {
 
   return (
     <div className="container">
-      <h1>Dictionary</h1>
+      <h1 className="text-center">Dictionary</h1>
       <nav>
         <div className="nav nav-tabs" id="nav-tab" role="tablist">
-          <button
-            style={{ color: "black" }}
-            className="nav-link active"
-            id="nav-home-tab"
-            data-bs-toggle="tab"
-            data-bs-target="#nav-home"
-            type="button"
-            role="tab"
-            aria-controls="nav-home"
-            aria-selected="true"
-          >
-            Learned words
-          </button>
-          <button
-            style={{ color: "black" }}
-            className="nav-link"
-            id="nav-profile-tab"
-            data-bs-toggle="tab"
-            data-bs-target="#nav-profile"
-            type="button"
-            role="tab"
-            aria-controls="nav-profile"
-            aria-selected="false"
-          >
-            Difficult words
-          </button>
-          <button
-            style={{ color: "black" }}
-            className="nav-link"
-            id="nav-contact-tab"
-            data-bs-toggle="tab"
-            data-bs-target="#nav-contact"
-            type="button"
-            role="tab"
-            aria-controls="nav-contact"
-            aria-selected="false"
-          >
-            Deleted
-          </button>
+          <TabButton
+            label="Learned words"
+            active=" active"
+            name="home"
+            selected="true"
+          />
+          <TabButton
+            label="Difficult words"
+            active=""
+            name="profile"
+            selected="false"
+          />
+          <TabButton
+            label="Deleted"
+            active=""
+            name="contact"
+            selected="false"
+          />
         </div>
       </nav>
 

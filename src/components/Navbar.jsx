@@ -10,7 +10,7 @@ function Navbar({ userName }) {
     >
       <nav className="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
         <Link
-          to="/welcome"
+          to="/login"
           className="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none"
         >
           <i className="bi bi-box mx-2"></i>

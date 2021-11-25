@@ -7,7 +7,6 @@ import MiniGames from "./pages/MiniGames";
 import Register from "./pages/Register";
 import Settings from "./pages/Settings";
 import Statistics from "./pages/Statistics";
-import Welcome from "./pages/Welcome";
 import Navbar from "./components/Navbar";
 import NotFound from "./pages/NotFound";
 import Logout from "./components/Logout";
@@ -41,7 +40,6 @@ function App() {
         <React.Fragment>
           <Navbar userName={userName} />
           <Switch>
-            <Route path="/welcome" component={Welcome} />
             <Route path="/register" component={Register} />
             <Route path="/login" component={Login} />
             <Route path="/logout" component={Logout} />
@@ -51,7 +49,7 @@ function App() {
             <Route path="/statistics" component={Statistics} />
             <Route path="/settings" component={Settings} />
             <Route path="/not-found" component={NotFound} />
-            <Redirect from="/" exact to="welcome" />
+            <Redirect from="/" exact to="/login" />
             <Redirect to="/not-found" />
           </Switch>
         </React.Fragment>

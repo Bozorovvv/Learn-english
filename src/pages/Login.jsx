@@ -1,57 +1,67 @@
-import React, { useState } from 'react'
-import Input from '../components/Input'
-import { login } from '../services/authService'
+import React, { useState } from "react";
+import Input from "../components/Input";
+import { login } from "../services/authService";
 
 function Login() {
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [passwordErrors, setPasswordErrors] = useState()
-  const [userErrors, setUserErrors] = useState()
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordErrors, setPasswordErrors] = useState();
+  const [userErrors, setUserErrors] = useState();
 
   function validate() {
-    const errors = {}
-    if (username.trim() === '') {
-      errors.username = 'Username is required'
+    const errors = {};
+    if (username.trim() === "") {
+      errors.username = "Username is required";
     }
-    if (password.trim() === '') {
-      errors.password = 'Password is required'
+    if (password.trim() === "") {
+      errors.password = "Password is required";
     }
-    return Object.keys(errors).length === 0 ? null : errors
+    return Object.keys(errors).length === 0 ? null : errors;
   }
 
   async function handleSubmit(e) {
-    e.preventDefault()
+    e.preventDefault();
     try {
-      await login(username, password)
-      window.location = '/learning'
-      setUsername('')
-      setPassword('')
+      await login(username, password);
+      window.location = "/learning";
+      setUsername("");
+      setPassword("");
     } catch (err) {
       if (err.response.status === 404) {
-        setUserErrors('Couldn`t find a username')
+        setUserErrors("Couldn`t find a username");
       }
       if (err.response.status === 403) {
-        setPasswordErrors('Password is wrong!')
+        setPasswordErrors("Password is wrong!");
       }
-      setPassword('')
+      setPassword("");
     }
   }
 
   function HandleChagePassword(e) {
-    if (e.target.value !== '') setPasswordErrors(false)
-    setPassword(e.target.value)
+    if (e.target.value !== "") setPasswordErrors(false);
+    setPassword(e.target.value);
   }
 
   function HandleChageUsername(e) {
-    if (e.target.value !== '') setUserErrors(false)
-    setUsername(e.target.value)
+    if (e.target.value !== "") setUserErrors(false);
+    setUsername(e.target.value);
   }
 
   return (
     <div className="container">
       <div className="row justify-content-center">
-        <div className="col-5 mt-5">
-          <h1>Login</h1>
+        <div className="col-6 mt-5">
+          <div
+            class="bg-image"
+            style={{
+              backgroundImage:
+                "url('https://images.financialexpress.com/2020/04/1-918.jpg')",
+              height: "400px",
+              width: "100%",
+            }}
+          ></div>
+
+          <h1 className='mt-2'>Login</h1>
           <form onSubmit={handleSubmit}>
             <Input
               autoFocus={true}
@@ -81,7 +91,7 @@ function Login() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default Login
+export default Login;

@@ -64,7 +64,16 @@ function Register({ history }) {
   return (
     <div className="container">
       <div className="row justify-content-center">
-        <div className="col-5 mt-5">
+        <div className="col-6 mt-5">
+          <div
+            class="bg-image"
+            style={{
+              backgroundImage:
+                "url('https://tv-english.club/wp-content/uploads/2016/04/studyingenglish.jpg')",
+              height: "400px",
+              width: "100%",
+            }}
+          ></div>
           <h1>Register</h1>
           <form onSubmit={handleSubmit}>
             <Input
